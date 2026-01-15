@@ -2,104 +2,91 @@ import os
 import json
 import feedparser
 import requests
-from google import genai
+import warnings
+import google.generativeai as genai
 from supabase import create_client, Client
 
-# --- DEBUGGING: Check if keys exist ---
-# This prints "Found" or "Missing" to the logs (safe, doesn't show the actual key)
+# 1. Silence the annoyance (Ignore the warning)
+warnings.filterwarnings("ignore", category=FutureWarning)
+
+# 2. DEBUG: Check if secrets exist
+# This will print "Found" or "MISSING" in your GitHub logs.
 print(f"DEBUG: Supabase URL is {'Found' if os.environ.get('SUPABASE_URL') else 'MISSING'}")
 print(f"DEBUG: Service Key is {'Found' if os.environ.get('SUPABASE_SERVICE_KEY') else 'MISSING'}")
+print(f"DEBUG: Gemini Key is {'Found' if os.environ.get('GEMINI_API_KEY') else 'MISSING'}")
 
-# --- SETUP ---
-# 1. Load Keys
+# 3. Load Keys
 SUPABASE_URL = os.environ.get("SUPABASE_URL")
-SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_KEY") # Ensure this matches your YAML env name
+SUPABASE_KEY = os.environ.get("SUPABASE_SERVICE_KEY")
 GEMINI_KEY = os.environ.get("GEMINI_API_KEY")
 
+# 4. Initialize
 if not SUPABASE_URL or not SUPABASE_KEY:
-    raise ValueError("❌ CRITICAL ERROR: Supabase Secrets are missing in GitHub Settings!")
+    print("❌ STOPPING: You need to add secrets in GitHub Settings!")
+    exit(1) # Stop the script safely
 
-# 2. Initialize Clients
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
-client = genai.Client(api_key=GEMINI_KEY)
+try:
+    supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+    genai.configure(api_key=GEMINI_KEY)
+except Exception as e:
+    print(f"❌ Connection Error: {e}")
+    exit(1)
 
 RSS_FEED = 'https://techcrunch.com/feed/'
 
 def fetch_clean_text(url):
     try:
-        # Use Jina.ai to extract main text
         return requests.get(f"https://r.jina.ai/{url}").text
-    except Exception as e:
-        print(f"Error fetching text: {e}")
+    except:
         return ""
 
 def run_agent():
-    print("🤖 Agent Starting...")
+    print("🤖 Agent Starting (Stable Version)...")
     feed = feedparser.parse(RSS_FEED)
     
     if not feed.entries:
-        print("❌ No entries found in RSS feed.")
+        print("❌ No entries found.")
         return
 
-    # Process top 2 articles
     for entry in feed.entries[:2]:
         print(f"\nProcessing: {entry.title}")
 
-        # Check Duplicates
         existing = supabase.table('posts').select('id').eq('source_url', entry.link).execute()
         if existing.data:
-            print("   ↳ 😴 Already exists. Skipping.")
+            print("   ↳ 😴 Already exists.")
             continue
 
-        # Fetch Content
-        print("   ↳ 📖 Reading article...")
+        print("   ↳ 📖 Reading...")
         full_text = fetch_clean_text(entry.link)
-        if not full_text: continue
-
-        # Generate with Gemini (New Syntax)
-        print("   ↳ 🧠 Writing with Gemini...")
+        
+        print("   ↳ 🧠 Writing...")
+        model = genai.GenerativeModel('gemini-1.5-pro')
         
         prompt = f"""
-        You are a pro tech blogger. Rewrite this news into a blog post.
-        
-        RULES:
-        1. Output ONLY valid JSON.
-        2. Format: {{ "title": "...", "slug": "...", "content": "markdown..." }}
-        3. Use H2 (##) for headers in markdown.
-        4. Tone: Exciting, Professional.
-        
-        SOURCE:
-        {full_text[:5000]} 
+        Rewrite this news into a blog post.
+        OUTPUT JSON: {{ "title": "...", "slug": "...", "content": "markdown..." }}
+        SOURCE: {full_text[:4000]}
         """
 
         try:
-            response = client.models.generate_content(
-                model='gemini-2.0-flash', # Or gemini-1.5-pro
-                contents=prompt,
-                config={
-                    'response_mime_type': 'application/json'
-                }
-            )
+            # Generate
+            result = model.generate_content(prompt, generation_config={"response_mime_type": "application/json"})
+            post = json.loads(result.text)
             
-            post_data = json.loads(response.text)
-
-            # Save to Supabase
-            data = {
-                "title": post_data['title'],
-                "slug": post_data['slug'],
-                "content": post_data['content'],
+            # Save
+            supabase.table('posts').insert({
+                "title": post['title'],
+                "slug": post['slug'],
+                "content": post['content'],
                 "source_url": entry.link,
-                "is_published": False, # Draft mode
+                "is_published": False,
                 "views_count": 0,
                 "likes_count": 0
-            }
-            
-            supabase.table('posts').insert(data).execute()
-            print("   ✅ SUCCESS: Draft saved to database!")
-            break # Stop after 1 successful post
-
+            }).execute()
+            print("   ✅ SUCCESS: Draft saved!")
+            break
         except Exception as e:
-            print(f"   ❌ Error: {e}")
+            print(f"   ❌ AI/DB Error: {e}")
 
 if __name__ == "__main__":
     run_agent()
