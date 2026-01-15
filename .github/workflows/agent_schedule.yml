@@ -10,11 +10,24 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-python@v4
+
+      - name: Set up Python 3.10
+        uses: actions/setup-python@v4
         with:
           python-version: "3.10"
-      - run: pip install -r backend/requirements.txt
+          cache: "pip" # Speeds up future runs
 
+      - name: Debug and Install
+        run: |
+          # 1. Check exactly what version we are running
+          echo "Python Version:"
+          python --version
+
+          # 2. FORCE UPGRADE PIP (This fixes the 'versions: none' error)
+          python -m pip install --upgrade pip
+
+          # 3. Install dependencies
+          pip install -r backend/requirements.txt
       # Run Agent (Unless it's Sunday midnight)
       - run: python backend/agent.py
         if: github.event.schedule != '0 0 * * 0'
