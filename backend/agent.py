@@ -60,7 +60,7 @@ def run_agent():
         full_text = fetch_clean_text(entry.link)
         
         print("   ↳ 🧠 Writing...")
-        model = genai.GenerativeModel('gemini-1.5-pro')
+        model = genai.GenerativeModel('gemini-1.5-flash')
         
         prompt = f"""
         Rewrite this news into a blog post.
