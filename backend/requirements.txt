@@ -1,0 +1,5 @@
+supabase
+google-generative-ai
+feedparser
+requests
+python-dotenv
