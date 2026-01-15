@@ -1,5 +1,5 @@
 supabase
-google-generative-ai
+google-generativeai
 feedparser
 requests
 python-dotenv
