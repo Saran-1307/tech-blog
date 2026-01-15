@@ -1,0 +1,31 @@
+name: News Agent
+on:
+  schedule:
+    - cron: "0 */4 * * *" # Run Agent every 4 hours
+    - cron: "0 0 * * 0" # Run Cleanup every Sunday
+  workflow_dispatch: # Allows manual "Run Now" button
+
+jobs:
+  run-scripts:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.10"
+      - run: pip install -r backend/requirements.txt
+
+      # Run Agent (Unless it's Sunday midnight)
+      - run: python backend/agent.py
+        if: github.event.schedule != '0 0 * * 0'
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+
+      # Run Cleanup (Only Sunday)
+      - run: python backend/cleanup.py
+        if: github.event.schedule == '0 0 * * 0'
+        env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
