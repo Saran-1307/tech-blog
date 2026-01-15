@@ -1,44 +1,47 @@
 name: News Agent
+
 on:
   schedule:
-    - cron: "0 */4 * * *" # Run Agent every 4 hours
-    - cron: "0 0 * * 0" # Run Cleanup every Sunday
-  workflow_dispatch: # Allows manual "Run Now" button
+    - cron: '0 */4 * * *'  # Runs every 4 hours
+    - cron: '0 0 * * 0'    # Cleanup runs every Sunday at midnight
+  workflow_dispatch:       # Allows you to click "Run workflow" manually
 
 jobs:
   run-scripts:
     runs-on: ubuntu-latest
+    
     steps:
+      # 1. Check out your code
       - uses: actions/checkout@v4
 
-      - name: Set up Python 3.10
+      # 2. Set up Python 3.11 (Fixes the Google warning)
+      - name: Set up Python
         uses: actions/setup-python@v4
         with:
-          python-version: "3.10"
-          cache: "pip" # Speeds up future runs
+          python-version: '3.11'
+          cache: 'pip' # Speeds up installation
 
-      - name: Debug and Install
+      # 3. Install Libraries
+      - name: Install Dependencies
         run: |
-          # 1. Check exactly what version we are running
-          echo "Python Version:"
-          python --version
-
-          # 2. FORCE UPGRADE PIP (This fixes the 'versions: none' error)
           python -m pip install --upgrade pip
-
-          # 3. Install dependencies
           pip install -r backend/requirements.txt
-      # Run Agent (Unless it's Sunday midnight)
-      - run: python backend/agent.py
+
+      # 4. Run the AI Agent (Writes Drafts)
+      # This step needs the secrets to connect to Supabase!
+      - name: Run AI Agent
         if: github.event.schedule != '0 0 * * 0'
+        run: python backend/agent.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          # Make sure this secret name matches exactly what you put in GitHub Settings!
+          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }} 
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
 
-      # Run Cleanup (Only Sunday)
-      - run: python backend/cleanup.py
+      # 5. Run Cleanup (Only on Sundays)
+      - name: Run Weekly Cleanup
         if: github.event.schedule == '0 0 * * 0'
+        run: python backend/cleanup.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
