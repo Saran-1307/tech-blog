@@ -13,7 +13,7 @@ from supabase import create_client, Client
 warnings.filterwarnings("ignore", category=FutureWarning)
 
 # --- CONFIGURATION ---
-SUPABASE_URL = "https://rmidgficnfbtrlzanfyd.supabase.co"
+SUPABASE_URL = os.getenv("SUPABASE_URL")
 
 # ⚠️ PASTE YOUR REAL KEYS HERE
 SUPABASE_KEY = os.getenv("SUPABASE_KEY")

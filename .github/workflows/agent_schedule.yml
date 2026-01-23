@@ -3,7 +3,7 @@ name: News Agent
 on:
   schedule:
     - cron: "0 */2 * * *" # Runs every 2 hours (e.g., 12:00, 2:00, 4:00...)
-    - cron: "0 0 * * 0" # Cleanup runs every Sunday at midnight
+    - cron: "0 0 */10 * *" # CLEANUP: Runs at midnight every 10 days (1st, 11th, 21st, 31st)
   workflow_dispatch: # Allows you to click "Run workflow" manually
 
 jobs:
@@ -29,18 +29,19 @@ jobs:
 
       # 4. Run the AI Agent (Writes Drafts)
       - name: Run AI Agent
-        if: github.event.schedule != '0 0 * * 0'
+        if: github.event.schedule != '0 0 */10 * *'
         run: python backend/agent.py
         env:
+          SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
           GEMINI_KEY: ${{ secrets.GEMINI_KEY }}
           NEWSDATA_KEY: ${{ secrets.NEWSDATA_KEY }}
           GNEWS_KEY: ${{ secrets.GNEWS_KEY }}
 
-      # 5. Run Cleanup (Only on Sundays)
-      - name: Run Weekly Cleanup
-        if: github.event.schedule == '0 0 * * 0'
+      # 5. Run Cleanup (Every 10 Days)
+      - name: Run 10-Day Database Cleanup
+        if: github.event.schedule == '0 0 */10 * *'
         run: python backend/cleanup.py
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
-          SUPABASE_SERVICE_KEY: ${{ secrets.SUPABASE_SERVICE_KEY }}
+          SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
