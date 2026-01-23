@@ -1,7 +1,7 @@
 import { createClient } from "@supabase/supabase-js";
 
-// USE THE ANON PUBLIC KEY HERE (Not the service key!)
-const supabaseUrl = "https://rmidgficnfbtrlzanfyd.supabase.co";
-const supabaseKey = "sb_publishable_iiwQ-ixEeVgHYS4OMDERPA_v_DcWDZp";
+// Pulls keys from the .env file
+const supabaseUrl = process.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = process.env.VITE_SUPABASE_ANON_KEY;
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey);
