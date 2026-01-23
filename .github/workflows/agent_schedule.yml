@@ -45,3 +45,15 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+
+      - name: Debug Environment
+        run: |
+          if [ -z "${{ secrets.SUPABASE_URL }}" ]; then
+            echo "❌ URL is MISSING from secrets!"
+          else
+            echo "✅ URL is loaded successfully!"
+          fi
+          if [ -z "${{ secrets.SUPABASE_KEY }}" ]; then
+            echo "❌ KEY is MISSING from secrets!"
+          else
+            echo "✅ KEY is loaded successfully!"
