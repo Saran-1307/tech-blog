@@ -14,14 +14,14 @@ jobs:
       # 1. Check out your code
       - uses: actions/checkout@v4
 
-      # 2. Set up Python 3.11
+      # 2. Set up Python 3.11 (For Backend)
       - name: Set up Python
         uses: actions/setup-python@v4
         with:
           python-version: "3.11"
-          cache: "pip" # Speeds up installation
+          cache: "pip"
 
-      # 3. Install Libraries
+      # 3. Install Python Libraries
       - name: Install Dependencies
         run: |
           python -m pip install --upgrade pip
@@ -45,3 +45,28 @@ jobs:
         env:
           SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
           SUPABASE_KEY: ${{ secrets.SUPABASE_KEY }}
+
+      # =======================================================
+      # ⬇️ NEW: FRONTEND BUILD STEPS ⬇️
+      # =======================================================
+
+      # 6. Set up Node.js (Required for React/Vite)
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "18" # Standard version for React/Vite
+
+      # 7. Install Frontend Packages
+      - name: Install Frontend Dependencies
+        run: |
+          cd frontend
+          npm install
+
+      # 8. Build React App (Your requested step!)
+      - name: Build React App
+        run: |
+          cd frontend
+          npm run build
+        env: # <--- THIS IS THE MAGIC PART
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}

@@ -1,7 +1,8 @@
 import { createClient } from "@supabase/supabase-js";
 
-// Pulls keys from the .env file
-const supabaseUrl = os.getenv("SUPABASE_URL");
-const supabaseAnonKey = os.getenv("SUPABASE_KEY");
+// Vite looks for import.meta.env
+// CRA looks for process.env
+const supabaseUrl = import.meta.env.VITE_SUPABASE_URL;
+const supabaseAnonKey = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
