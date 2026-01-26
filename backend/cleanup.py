@@ -4,7 +4,7 @@ from supabase import create_client, Client
 
 # --- 1. SETUP SUPABASE ---
 SUPABASE_URL = os.getenv("SUPABASE_URL")
-SUPABASE_KEY = os.getenv("SUPABASE_KEY") # Uses the Service Role Key from GitHub Secrets
+SUPABASE_KEY = os.getenv("SUPABASE_KEY") 
 
 try:
     supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
