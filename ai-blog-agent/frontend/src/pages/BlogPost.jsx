@@ -118,7 +118,7 @@ export default function Post() {
             <ArrowLeft size={24} />
           </Link>
           <div className="font-bold text-sm tracking-widest uppercase opacity-50 hidden md:block">
-            Tech Blog
+            Kinetik
           </div>
           <div className="flex items-center gap-2">
             <div
@@ -257,8 +257,8 @@ export default function Post() {
               hasLiked
                 ? "bg-red-600 text-white"
                 : isDarkMode
-                ? "bg-black hover:bg-gray-800"
-                : "bg-gray-800 hover:bg-gray-700"
+                  ? "bg-black hover:bg-gray-800"
+                  : "bg-gray-800 hover:bg-gray-700"
             }`}
           >
             <Heart size={20} fill={hasLiked ? "currentColor" : "none"} />

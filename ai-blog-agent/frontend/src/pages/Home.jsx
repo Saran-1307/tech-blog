@@ -122,8 +122,9 @@ export default function Home() {
         }`}
       >
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
+          {/* --- BRAND LOGO --- */}
           <div
-            className="font-black text-2xl tracking-tighter flex items-center gap-2 cursor-pointer select-none"
+            className="font-black text-2xl tracking-tighter flex items-center gap-2 cursor-pointer select-none uppercase"
             onClick={() => setSelectedCategory("All")}
           >
             <span
@@ -131,9 +132,8 @@ export default function Home() {
                 isDarkMode ? "bg-white text-black" : "bg-black text-white"
               }`}
             >
-              TECH
+              KINETIK
             </span>
-            <span>BLOG</span>
           </div>
 
           <div className="flex items-center gap-2">
@@ -207,8 +207,8 @@ export default function Home() {
                     ? "bg-white text-black"
                     : "bg-black text-white"
                   : isDarkMode
-                  ? "bg-gray-800 hover:bg-gray-700"
-                  : "bg-gray-50 hover:bg-white"
+                    ? "bg-gray-800 hover:bg-gray-700"
+                    : "bg-gray-50 hover:bg-white"
               }`}
             >
               <LayoutGrid size={28} className="mb-2" />
@@ -224,8 +224,8 @@ export default function Home() {
                       ? "bg-white text-black"
                       : "bg-black text-white"
                     : isDarkMode
-                    ? "bg-gray-800 hover:bg-gray-700 text-gray-300"
-                    : "bg-gray-50 hover:bg-white text-gray-700"
+                      ? "bg-gray-800 hover:bg-gray-700 text-gray-300"
+                      : "bg-gray-50 hover:bg-white text-gray-700"
                 }`}
               >
                 <span
@@ -280,8 +280,8 @@ export default function Home() {
                   ? "bg-white text-black"
                   : "bg-black text-white"
                 : isDarkMode
-                ? "bg-gray-800"
-                : "bg-gray-50"
+                  ? "bg-gray-800"
+                  : "bg-gray-50"
             }`}
           >
             🔥 All News
@@ -296,8 +296,8 @@ export default function Home() {
                     ? "bg-white text-black"
                     : "bg-black text-white"
                   : isDarkMode
-                  ? "bg-gray-800 text-gray-300"
-                  : "bg-gray-50 text-gray-700"
+                    ? "bg-gray-800 text-gray-300"
+                    : "bg-gray-50 text-gray-700"
               }`}
             >
               <span className={cat.color.split(" ")[1]}>
