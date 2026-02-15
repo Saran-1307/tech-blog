@@ -132,7 +132,7 @@ export default function Home() {
                 isDarkMode ? "bg-white text-black" : "bg-black text-white"
               }`}
             >
-              KINETIK
+              DailyScope
             </span>
           </div>
 

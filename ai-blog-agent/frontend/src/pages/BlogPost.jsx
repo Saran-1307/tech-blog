@@ -118,7 +118,7 @@ export default function Post() {
             <ArrowLeft size={24} />
           </Link>
           <div className="font-bold text-sm tracking-widest uppercase opacity-50 hidden md:block">
-            Kinetik
+            Daily Scope
           </div>
           <div className="flex items-center gap-2">
             <div
