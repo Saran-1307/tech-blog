@@ -141,10 +141,10 @@ export default function Post() {
         </div>
       </nav>
 
-      {/* PAGE CONTAINER - Now permanently locked to the grid layout so the sidebar always exists */}
-      <div className="mx-auto px-6 pt-28 max-w-6xl grid grid-cols-1 lg:grid-cols-12 gap-10">
-        {/* MAIN CONTENT */}
-        <div className="lg:col-span-8">
+      {/* PAGE CONTAINER - Changed breakpoints from lg to md, and adjusted column sizes */}
+      <div className="mx-auto px-6 pt-28 max-w-7xl grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
+        {/* MAIN CONTENT - Takes up 9 out of 12 columns on PC */}
+        <div className="md:col-span-8 lg:col-span-9">
           <div className="mb-6">
             <div className="flex gap-4 text-xs font-bold opacity-60 uppercase tracking-wider mb-3">
               <span className="flex items-center gap-1">
@@ -181,8 +181,8 @@ export default function Post() {
           </div>
         </div>
 
-        {/* GOOGLE ADSENSE SIDEBAR */}
-        <div className="lg:col-span-4 mt-8 lg:mt-0">
+        {/* GOOGLE ADSENSE SIDEBAR - Takes up 3 out of 12 columns on PC (Small right portion) */}
+        <div className="md:col-span-4 lg:col-span-3 mt-10 md:mt-0">
           <div
             className={`sticky top-24 rounded-2xl overflow-hidden shadow-lg border p-4 flex flex-col items-center justify-center min-h-[300px] ${isDarkMode ? "bg-gray-900 border-gray-800" : "bg-gray-50 border-gray-200"}`}
           >
