@@ -32,9 +32,6 @@ export default function App() {
             <Route path="/terms" element={<CompanyInfo initialTab="terms" />} />
           </Routes>
         </div>
-
-        {/* 👇 The Footer sits at the very bottom of every page */}
-        <Footer isDarkMode={false} />
       </div>
     </BrowserRouter>
   );
