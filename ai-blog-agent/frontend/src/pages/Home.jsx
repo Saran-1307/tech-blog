@@ -109,7 +109,8 @@ export default function Home() {
 
   return (
     <div
-      className={`min-h-screen transition-colors duration-300 pb-20 ${
+      // 👇 CHANGED: pb-20 to pb-10 so it sits nicely above the new Footer
+      className={`min-h-full transition-colors duration-300 pb-10 ${
         isDarkMode ? "bg-black text-gray-100" : "bg-gray-50 text-gray-900"
       }`}
     >
@@ -300,9 +301,7 @@ export default function Home() {
                     : "bg-gray-50 text-gray-700"
               }`}
             >
-              <span className={cat.color.split(" ")[1]}>
-                {/* Kept smaller icons for mobile */} {cat.name}
-              </span>
+              <span className={cat.color.split(" ")[1]}>{cat.name}</span>
             </button>
           ))}
         </div>

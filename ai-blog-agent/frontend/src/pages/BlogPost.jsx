@@ -54,17 +54,6 @@ export default function Post() {
     fetchAndIncrementView();
   }, [slug]);
 
-  // 2. Initialize AdSense AFTER the post loads
-  useEffect(() => {
-    if (!loading && post) {
-      try {
-        (window.adsbygoogle = window.adsbygoogle || []).push({});
-      } catch (e) {
-        console.error("AdSense error:", e);
-      }
-    }
-  }, [loading, post]);
-
   const handleLike = async () => {
     if (hasLiked) return;
     setPost((prev) => ({ ...prev, likes_count: (prev.likes_count || 0) + 1 }));
@@ -141,67 +130,41 @@ export default function Post() {
         </div>
       </nav>
 
-      {/* PAGE CONTAINER - Changed breakpoints from lg to md, and adjusted column sizes */}
-      <div className="mx-auto px-6 pt-28 max-w-7xl grid grid-cols-1 md:grid-cols-12 gap-8 lg:gap-12">
-        {/* MAIN CONTENT - Takes up 9 out of 12 columns on PC */}
-        <div className="md:col-span-8 lg:col-span-9">
-          <div className="mb-6">
-            <div className="flex gap-4 text-xs font-bold opacity-60 uppercase tracking-wider mb-3">
-              <span className="flex items-center gap-1">
-                <Calendar size={12} />{" "}
-                {new Date(post.created_at).toLocaleDateString()}
-              </span>
-              <span className="flex items-center gap-1 text-blue-500">
-                <User size={12} /> {post.author || "Admin"}
-              </span>
-            </div>
-            <h1 className="text-3xl md:text-5xl font-black leading-tight mb-4">
-              {post.title}
-            </h1>
+      {/* PAGE CONTAINER - Centered for better reading experience */}
+      <div className="mx-auto px-6 pt-28 max-w-4xl">
+        <div className="mb-6">
+          <div className="flex gap-4 text-xs font-bold opacity-60 uppercase tracking-wider mb-3">
+            <span className="flex items-center gap-1">
+              <Calendar size={12} />{" "}
+              {new Date(post.created_at).toLocaleDateString()}
+            </span>
+            <span className="flex items-center gap-1 text-blue-500">
+              <User size={12} /> {post.author || "Admin"}
+            </span>
           </div>
-
-          <div
-            className={`w-full aspect-video rounded-2xl overflow-hidden shadow-xl mb-10 ${isDarkMode ? "bg-gray-900" : "bg-gray-100"}`}
-          >
-            <img
-              src={
-                post.image_url ||
-                "https://images.unsplash.com/photo-1550751827-4bd374c3f58b"
-              }
-              alt={post.title}
-              className="w-full h-full object-cover"
-            />
-          </div>
-
-          <div
-            style={{ fontSize: `${textSize}px`, lineHeight: "1.8" }}
-            className={`prose max-w-none transition-all duration-300 font-serif whitespace-pre-wrap ${isDarkMode ? "prose-invert text-gray-300" : "text-gray-700"}`}
-          >
-            {post.content}
-          </div>
+          <h1 className="text-3xl md:text-5xl font-black leading-tight mb-4">
+            {post.title}
+          </h1>
         </div>
 
-        {/* GOOGLE ADSENSE SIDEBAR - Takes up 3 out of 12 columns on PC (Small right portion) */}
-        <div className="md:col-span-4 lg:col-span-3 mt-10 md:mt-0">
-          <div
-            className={`sticky top-24 rounded-2xl overflow-hidden shadow-lg border p-4 flex flex-col items-center justify-center min-h-[300px] ${isDarkMode ? "bg-gray-900 border-gray-800" : "bg-gray-50 border-gray-200"}`}
-          >
-            <div className="text-xs font-bold opacity-40 uppercase tracking-widest mb-4">
-              Advertisement
-            </div>
+        <div
+          className={`w-full aspect-video rounded-2xl overflow-hidden shadow-xl mb-10 ${isDarkMode ? "bg-gray-900" : "bg-gray-100"}`}
+        >
+          <img
+            src={
+              post.image_url ||
+              "https://images.unsplash.com/photo-1550751827-4bd374c3f58b"
+            }
+            alt={post.title}
+            className="w-full h-full object-cover"
+          />
+        </div>
 
-            {/* The Ad Container */}
-            <div className="w-full overflow-hidden flex justify-center">
-              <ins
-                className="adsbygoogle"
-                style={{ display: "block", width: "100%" }}
-                data-ad-client="ca-pub-2433053692740067" // Your publisher ID
-                data-ad-slot="" // You will fill this in after approval!
-                data-ad-format="auto"
-                data-full-width-responsive="true"
-              ></ins>
-            </div>
-          </div>
+        <div
+          style={{ fontSize: `${textSize}px`, lineHeight: "1.8" }}
+          className={`prose max-w-none transition-all duration-300 font-serif whitespace-pre-wrap ${isDarkMode ? "prose-invert text-gray-300" : "text-gray-700"}`}
+        >
+          {post.content}
         </div>
       </div>
 

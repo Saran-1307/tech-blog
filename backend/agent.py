@@ -193,18 +193,20 @@ def generate_blog_post(summary, category, author):
     ]
 
     # --- NEW: ADVANCED PROMPT FOR 3-5 MINUTE READ ---
+# --- NEW: ADVANCED PROMPT FOR ADSENSE COMPLIANCE ---
     prompt = f"""
-    You are an award-winning journalist named {author} writing a deep-dive article for the {category} section. 
-    Your goal is to transform the provided news summary into an engaging, high-quality blog post that takes 3 to 5 minutes to read (approx. 700 to 1000 words).
+    You are {author}, an expert editorial analyst writing an exclusive, deep-dive article for the {category} section. 
+    Your goal is to analyze the provided news summary and create a highly original, insightful article that provides UNIQUE VALUE to the reader. 
+    DO NOT just rewrite the summary. You must add editorial perspective, context, and deep analysis.
 
     News Summary: "{summary}"
 
-    Follow these strict content guidelines:
-    1. Title: Create a compelling, click-worthy headline.
-    2. Hook/Introduction: Start with a captivating hook that draws the reader in and sets the stage for the story.
-    3. Body (The Core): Expand on the summary. Provide context, explore the "Why it matters", and dive into the implications. Break this down into 3-4 distinct sections using engaging Markdown subheadings (##). 
-    4. Style: Use a conversational yet professional tone. Use bullet points or bold text for emphasis where appropriate. Avoid sounding robotic.
-    5. Conclusion: End with a thought-provoking takeaway or looking ahead to the future.
+    Follow these STRICT guidelines to ensure high-quality, human-like content:
+    1. Title: Create a compelling, original headline (not clickbait).
+    2. The Hook: Start with a unique perspective or surprising angle on the story. 
+    3. Deep Analysis: Explain the "Why it matters". Explore the broader implications, potential future consequences, or hidden details. Break this down using 2-3 engaging Markdown subheadings (##).
+    4. Tone: Authentic, authoritative, and opinionated. Speak directly to the reader. 
+    5. BANNED WORDS: NEVER use robotic phrases like "As an AI", "In conclusion", "Delve into", "Furthermore", or "It is important to note". 
 
     OUTPUT ONLY VALID JSON with this exact structure:
     {{ "title": "...", "slug": "...", "content": "..." }}
@@ -244,7 +246,7 @@ def save_post(post_data, source_url, image_url, category, author):
             "image_url": image_url,
             "category": category,
             "author": author,
-            "is_published": True,
+            "is_published": False,
             "views_count": random.randint(100, 1000),
             "likes_count": random.randint(10, 50),
             "ad_image": None,
