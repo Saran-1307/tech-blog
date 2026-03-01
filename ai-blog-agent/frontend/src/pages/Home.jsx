@@ -107,10 +107,11 @@ export default function Home() {
     setIsMenuOpen(false);
   };
 
+  const currentYear = new Date().getFullYear();
+
   return (
     <div
-      // 👇 CHANGED: pb-20 to pb-10 so it sits nicely above the new Footer
-      className={`min-h-full transition-colors duration-300 pb-10 ${
+      className={`min-h-full transition-colors duration-300 flex flex-col ${
         isDarkMode ? "bg-black text-gray-100" : "bg-gray-50 text-gray-900"
       }`}
     >
@@ -123,7 +124,6 @@ export default function Home() {
         }`}
       >
         <div className="max-w-6xl mx-auto px-6 h-16 flex items-center justify-between">
-          {/* --- BRAND LOGO --- */}
           <div
             className="font-black text-2xl tracking-tighter flex items-center gap-2 cursor-pointer select-none uppercase"
             onClick={() => setSelectedCategory("All")}
@@ -149,7 +149,6 @@ export default function Home() {
               {isDarkMode ? <Sun size={22} /> : <Moon size={22} />}
             </button>
 
-            {/* MENU TRIGGER */}
             <button
               onClick={() => setIsMenuOpen(!isMenuOpen)}
               className={`p-2 rounded-full transition ${
@@ -164,19 +163,17 @@ export default function Home() {
         </div>
       </nav>
 
-      {/* =========================================
-          DESKTOP MENU (Fortnite Emote-Wheel Style)
-          ========================================= */}
+      {/* DESKTOP MENU */}
       <div
         className={`hidden md:flex fixed inset-0 z-50 items-center justify-center transition-all duration-300 ${
           isMenuOpen
             ? "opacity-100 visible backdrop-blur-lg bg-black/40"
             : "opacity-0 invisible pointer-events-none"
         }`}
-        onClick={() => setIsMenuOpen(false)} // Close if clicked outside
+        onClick={() => setIsMenuOpen(false)}
       >
         <div
-          onClick={(e) => e.stopPropagation()} // Prevent close when clicking inside the box
+          onClick={(e) => e.stopPropagation()}
           className={`relative max-w-xl w-full p-10 rounded-[40px] shadow-2xl transition-all duration-[400ms] ease-[cubic-bezier(0.34,1.56,0.64,1)] border ${
             isMenuOpen ? "scale-100 opacity-100" : "scale-50 opacity-0"
           } ${
@@ -185,7 +182,6 @@ export default function Home() {
               : "bg-white border-gray-100"
           }`}
         >
-          {/* Close Button Inside Menu */}
           <button
             onClick={() => setIsMenuOpen(false)}
             className={`absolute top-6 right-6 p-2 rounded-full transition active:scale-90 ${
@@ -243,9 +239,7 @@ export default function Home() {
         </div>
       </div>
 
-      {/* =========================================
-          MOBILE MENU (Draggable Bottom Sheet)
-          ========================================= */}
+      {/* MOBILE MENU */}
       <div
         className={`md:hidden fixed inset-0 bg-black/50 z-40 transition-opacity duration-300 ${
           isMenuOpen ? "opacity-100 visible" : "opacity-0 invisible"
@@ -309,11 +303,10 @@ export default function Home() {
 
       {/* --- MAIN CONTENT AREA --- */}
       <div
-        className={`max-w-6xl mx-auto px-6 pt-10 transition-all duration-300 ${
+        className={`flex-grow max-w-6xl w-full mx-auto px-6 pt-10 pb-16 transition-all duration-300 ${
           isMenuOpen ? "blur-sm opacity-50 pointer-events-none" : ""
         }`}
       >
-        {/* TRENDING SECTION */}
         {selectedCategory === "All" && (
           <div className="mb-12">
             <div className="flex items-center justify-between mb-6">
@@ -386,7 +379,6 @@ export default function Home() {
           </div>
         )}
 
-        {/* FILTERED NEWS LIST */}
         <div className="min-h-[300px]">
           <h2 className="text-xl font-bold mb-6 flex items-center gap-2 uppercase">
             <span className="w-1 h-6 bg-blue-500 rounded-full"></span>
@@ -462,6 +454,59 @@ export default function Home() {
           )}
         </div>
       </div>
+
+      {/* --- BUILT-IN FOOTER --- */}
+      <footer
+        className={`mt-auto border-t transition-colors duration-300 ${
+          isDarkMode
+            ? "bg-black border-gray-800 text-gray-400"
+            : "bg-white border-gray-200 text-gray-500"
+        }`}
+      >
+        <div className="max-w-6xl mx-auto px-6 py-8">
+          <div className="flex flex-col md:flex-row justify-between items-center gap-4">
+            <div className="flex flex-col items-center md:items-start">
+              <span
+                className={`font-black tracking-tighter text-xl uppercase mb-1 ${
+                  isDarkMode ? "text-white" : "text-black"
+                }`}
+              >
+                DailyScope
+              </span>
+              <p className="text-sm">
+                &copy; {currentYear} Daily Scope. All rights reserved.
+              </p>
+            </div>
+
+            <nav className="flex flex-wrap justify-center gap-x-6 gap-y-2 text-sm font-medium">
+              <Link
+                to="/about"
+                className="hover:text-blue-500 transition-colors"
+              >
+                About Us
+              </Link>
+              <Link
+                to="/contact"
+                className="hover:text-blue-500 transition-colors"
+              >
+                Contact
+              </Link>
+              <Link
+                to="/privacy"
+                className="hover:text-blue-500 transition-colors"
+              >
+                Privacy Policy
+              </Link>
+              <Link
+                to="/terms"
+                className="hover:text-blue-500 transition-colors"
+              >
+                Terms & Conditions
+              </Link>
+            </nav>
+          </div>
+        </div>
+      </footer>
     </div>
   );
 }
