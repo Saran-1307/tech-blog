@@ -3,7 +3,6 @@ import Home from "./pages/Home";
 import BlogPost from "./pages/BlogPost";
 import Admin from "./pages/Admin";
 import CompanyInfo from "./pages/CompanyInfo";
-import Footer from "./components/Footer"; // 👇 Import your new footer
 
 export default function App() {
   // Optional: If you want the footer to strictly follow the system/local theme,
