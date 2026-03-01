@@ -3,7 +3,7 @@ import Home from "./pages/Home";
 import BlogPost from "./pages/BlogPost";
 import Admin from "./pages/Admin";
 import CompanyInfo from "./pages/CompanyInfo";
-
+import Footer from "./pages/Footer";
 export default function App() {
   // Optional: If you want the footer to strictly follow the system/local theme,
   // you can pull the isDarkMode state up here, or just let it default to a dark/light footer.
