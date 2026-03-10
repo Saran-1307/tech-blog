@@ -246,7 +246,7 @@ def save_post(post_data, source_url, image_url, category, author):
             "image_url": image_url,
             "category": category,
             "author": author,
-            "is_published": False,
+            "is_published": True,
             "views_count": random.randint(100, 1000),
             "likes_count": random.randint(10, 50),
             "ad_image": None,
